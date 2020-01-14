@@ -1,0 +1,36 @@
+{
+  "builders": [
+    {
+      "type": "googlecompute",
+      "account_file": "$PATH_TO_CREDENTIALS",
+      "project_id": "$PROJECT",
+      "zone": "$ZONE",
+      "source_image_family": "ubuntu-1604-lts",      
+      "ssh_username": "$USER",
+      "image_name": "consul-client-{{timestamp}}"
+    }
+  ],
+   "provisioners": [{
+      "type": "file",
+      "source": "./consul_client.sh",
+      "destination": "~/consul_client.sh"
+    },
+    {	
+      "type": "shell", 
+      "inline": ["chmod +x ~/consul_client.sh"]
+    },
+    {
+      "type": "shell",
+      "inline": ["./consul_client.sh"]
+    },
+    {
+      "type": "file",
+      "source": "./provisioner.sh",
+      "destination": "~/provisioner.sh"
+    },
+    {
+      "type": "shell",
+      "inline": ["chmod +x ~/provisioner.sh"]
+    }]
+ 
+}
