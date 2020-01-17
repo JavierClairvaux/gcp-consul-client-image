@@ -15,6 +15,8 @@ sudo mkdir -p /etc/consul.d/scripts
 sudo useradd --system --home /etc/consul.d --shell /bin/false consul
 sudo mkdir -p /opt/consul
 sudo chown --recursive consul:consul /opt/consul
+cd ~
+mkdir consul_service
 
   # SYSTEM D
   echo '[Unit]
@@ -26,7 +28,7 @@ sudo chown --recursive consul:consul /opt/consul
   [Service]
   User=consul
   Group=consul
-  ExecStart=/usr/local/bin/consul agent -config-dir=/etc/consul.d/
+  ExecStart=/usr/local/bin/consul agent -config-dir=/etc/consul.d/ -config-dir=/home/{{USER}}/consul_service
   ExecReload=/usr/local/bin/consul reload
   KillMode=process
   Restart=on-failure
@@ -34,6 +36,8 @@ sudo chown --recursive consul:consul /opt/consul
 
   [Install]
   WantedBy=multi-user.target' | sudo tee /etc/systemd/system/consul.service
+sudo sed -i "s/{{USER}}/$USER/g" /etc/systemd/system/consul.service
+sudo systemctl daemon-reload
 
   # CONFIGURATION
   #COPING CONFIG
