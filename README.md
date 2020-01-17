@@ -8,4 +8,5 @@ To provision run:
 ~/provisioner $NODE_NAME $CONSUL_DC $ENCRYPT_KEY $SERVER_IP $USER
 ```
 
-To ad a service to consul copy your json file to ``/consul_service``, services will be automatically loaded thanks to ``entr``.
+To add a service to consul copy your json file to ``/consul_service``, services will be automatically loaded thanks to ``entr``.
+
