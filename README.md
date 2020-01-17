@@ -5,5 +5,7 @@ $PATH_TO_CREDENTIALS $PROJECT $ZONE $USER
 ```
 To provision run:
 ```Console
-~/provisioner $NODE_NAME $CONSUL_DC $ENCRYPT_KEY $SERVER_IP
+~/provisioner $NODE_NAME $CONSUL_DC $ENCRYPT_KEY $SERVER_IP $USER
 ```
+
+To ad a service to consul copy your json file to ``/consul_service``, services will be automatically loaded thanks to ``entr``.
