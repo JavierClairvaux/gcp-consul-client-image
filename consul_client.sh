@@ -2,9 +2,7 @@
 
 #Installation
 sudo apt update -y
-sudo apt install unzip -y
-sudo apt install dnsmasq -y
-
+sudo apt install unzip dnsmasq entr  -y
 
 cd /usr/local/bin
 sudo curl -o consul.zip https://releases.hashicorp.com/consul/1.6.1/consul_1.6.1_linux_amd64.zip
@@ -103,3 +101,19 @@ sudo groupadd docker
 sudo usermod -aG docker $USER
 newgrp docker
 sudo docker pull javier1/consul-envoy
+
+#entr config
+cd 
+
+mkdir consul_service
+echo 'Unit]
+Description="Entr file watching for new files for consul"
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /home/{{USER}}/entr/entr_script.sh
+
+[Install]
+WantedBy=multi-user.target' | sudo tee /etc/systemd/system/entr.service
+sudo sed -i "s/{{USER}}/$USER/g" /etc/systemd/system/entr.service
+sudo systemctl daemon-reload
