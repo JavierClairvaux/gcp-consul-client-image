@@ -6,7 +6,7 @@ consul_dc=$2
 encrypt_key=$3
 server_ip=$4
 
-ip=`hostname -I | tr -d ' '`
+ip=`hostname  -I | cut -f1 -d' '`
 
 sudo sed -i "s/{{NODE}}/${node_name}/g" /etc/consul.d/config.json
 sudo sed -i "s/{{DATACENTER}}/${consul_dc}/g" /etc/consul.d/config.json
