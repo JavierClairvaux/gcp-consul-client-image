@@ -31,6 +31,19 @@
     {
       "type": "shell",
       "inline": ["chmod +x ~/provisioner.sh"]
+    },
+    {
+      "type": "shell",
+      "inline": ["mkdir ~/entr"]
+    },
+    {
+      "type": "file",
+      "source": "./entr_script.sh",
+      "destination": "~/entr/entr_script.sh"
+    },
+    {
+      "type": "shell",
+      "inline": ["chmod +x ~/entr/entr_script.sh"]
     }]
  
 }
