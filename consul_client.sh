@@ -2,9 +2,7 @@
 
 #Installation
 sudo apt update -y
-sudo apt install unzip -y
-sudo apt install dnsmasq -y
-
+sudo apt install unzip dnsmasq entr  -y
 
 cd /usr/local/bin
 sudo curl -o consul.zip https://releases.hashicorp.com/consul/1.6.1/consul_1.6.1_linux_amd64.zip
@@ -15,6 +13,8 @@ sudo mkdir -p /etc/consul.d/scripts
 sudo useradd --system --home /etc/consul.d --shell /bin/false consul
 sudo mkdir -p /opt/consul
 sudo chown --recursive consul:consul /opt/consul
+cd ~
+mkdir consul_service
 
   # SYSTEM D
   echo '[Unit]
@@ -26,7 +26,7 @@ sudo chown --recursive consul:consul /opt/consul
   [Service]
   User=consul
   Group=consul
-  ExecStart=/usr/local/bin/consul agent -config-dir=/etc/consul.d/
+  ExecStart=/usr/local/bin/consul agent -config-dir=/etc/consul.d/ -config-dir=/home/{{USER}}/consul_service
   ExecReload=/usr/local/bin/consul reload
   KillMode=process
   Restart=on-failure
@@ -34,6 +34,8 @@ sudo chown --recursive consul:consul /opt/consul
 
   [Install]
   WantedBy=multi-user.target' | sudo tee /etc/systemd/system/consul.service
+sudo sed -i "s/{{USER}}/$USER/g" /etc/systemd/system/consul.service
+sudo systemctl daemon-reload
 
   # CONFIGURATION
   #COPING CONFIG
@@ -99,3 +101,19 @@ sudo groupadd docker
 sudo usermod -aG docker $USER
 newgrp docker
 sudo docker pull javier1/consul-envoy
+
+#entr config
+cd 
+
+mkdir consul_service
+echo 'Unit]
+Description="Entr file watching for new files for consul"
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /home/{{USER}}/entr/entr_script.sh
+
+[Install]
+WantedBy=multi-user.target' | sudo tee /etc/systemd/system/entr.service
+sudo sed -i "s/{{USER}}/$USER/g" /etc/systemd/system/entr.service
+sudo systemctl daemon-reload
